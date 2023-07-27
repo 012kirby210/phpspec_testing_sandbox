@@ -16,14 +16,6 @@ class Dinosaur
         $this->carnivorous = $carnivorous;
     }
 
-    public static function growVelociraptor(int $length) :self
-    {
-        $dinossaur = new static('Velociraptor', true);
-        $dinossaur->setLength($length);
-
-        return $dinossaur;
-    }
-
     public function getLength(): int
     {
         return $this->length;
