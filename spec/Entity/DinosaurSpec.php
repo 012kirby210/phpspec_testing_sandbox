@@ -76,4 +76,20 @@ class DinosaurSpec extends ObjectBehavior
         }
     }
 
+    function it_should_be_herbivore_by_default()
+    {
+        $this->shouldNotBeCarnivorous();
+    }
+
+    function it_should_be_allow_to_check_if_dinosaur_is_carnivorous()
+    {
+        $this->beConstructedWith("Valociraptor",true);
+        $this->shouldBeCarnivorous();
+
+    }
+
+    function it_should_allow_to_check_if_two_dinosaurs_have_the_same_diet()
+    {
+        $this->shouldHaveSameDietAs(new Dinosaur());
+    }
 }
