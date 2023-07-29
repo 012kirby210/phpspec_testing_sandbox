@@ -23,6 +23,8 @@ class EnclosureSpec extends ObjectBehavior
 
     function it_should_be_able_to_add_dinosaurs()
     {
+        $this->beConstructedWith(true);
+
         $this->addDinosaur(new Dinosaur());
         $this->addDinosaur(new Dinosaur());
 
@@ -31,6 +33,8 @@ class EnclosureSpec extends ObjectBehavior
 
     function it_should_not_be_able_to_mix_carnivorous_and_non_carnivorous()
     {
+        $this->beConstructedWith(true);
+
         $this->addDinosaur(new Dinosaur('vegg-eater',true));
 
         $this->shouldThrow(NotABuffetException::class)
@@ -39,7 +43,16 @@ class EnclosureSpec extends ObjectBehavior
 
     function it_should_not_enclose_dinosaur_if_there_no_security()
     {
+        $this->beConstructedWith(false);
+
         $this->shouldThrow(new DinosaursAreRunningRampantException('Are you crazy ?'))
             ->duringAddDinosaur(new Dinosaur('Velociraptor',true));
+    }
+
+    function it_should_failed_if_providing_initial_dinosaurs_without_security()
+    {
+        $this->beConstructedWith(false,[new Dinosaur()]);
+        $this->shouldThrow(DinosaursAreRunningRampantException::class)
+            ->duringInstantiation();
     }
 }
