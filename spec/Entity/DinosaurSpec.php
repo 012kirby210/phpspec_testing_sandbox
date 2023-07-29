@@ -4,6 +4,7 @@ namespace spec\App\Entity;
 
 use App\Entity\Dinosaur;
 use PhpSpec\Exception\Example\FailureException;
+use PhpSpec\Exception\Example\SkippingException;
 use PhpSpec\ObjectBehavior;
 
 class DinosaurSpec extends ObjectBehavior
@@ -61,6 +62,18 @@ class DinosaurSpec extends ObjectBehavior
         $this->setLength(12);
 
         $this->getDescription()->shouldReturn('The Tyrannosaurus carnivorous dinosaur is 12 meters long');
+    }
+
+    function it_grows_a_triceratops()
+    {
+
+    }
+
+    function it_grows_a_small_velociraptor()
+    {
+        if (!class_exists('Nanny')){
+            throw new SkippingException('omeone needs to look over dino puppies');
+        }
     }
 
 }
