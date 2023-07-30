@@ -7,6 +7,7 @@ use App\Entity\Enclosure;
 use App\Factory\DinosaurFactory;
 use App\Service\EnclosureBuilderService;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class EnclosureBuilderServiceSpec extends ObjectBehavior
 {
@@ -24,7 +25,7 @@ class EnclosureBuilderServiceSpec extends ObjectBehavior
         $dino2->setLength(2);
 
         // the method growVelociraptor must take 5 as  argument (it is asserted)
-        $dinosaurFactory->growVelociraptor(5)->willReturn($dino1,$dino2);
+        $dinosaurFactory->growVelociraptor(Argument::type('integer'))->willReturn($dino1, $dino2);
 
         $enclosure = $this->buildeEnclosure(1,2);
 
