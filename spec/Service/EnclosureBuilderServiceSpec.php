@@ -25,7 +25,10 @@ class EnclosureBuilderServiceSpec extends ObjectBehavior
         $dino2->setLength(2);
 
         // the method growVelociraptor must take 5 as  argument (it is asserted)
-        $dinosaurFactory->growVelociraptor(Argument::type('integer'))->willReturn($dino1, $dino2);
+        $dinosaurFactory->growVelociraptor(Argument::type('integer'))
+            ->willReturn($dino1, $dino2);
+
+//            ->shouldBeCalledTimes(2);
 
         $enclosure = $this->buildeEnclosure(1,2);
 
@@ -34,5 +37,8 @@ class EnclosureBuilderServiceSpec extends ObjectBehavior
         $enclosure->isSecurityActive()->shouldReturn(true);
         $enclosure->getDinosaurs()[0]->shouldBe($dino1);
         $enclosure->getDinosaurs()[1]->shouldBe($dino2);
+
+        $dinosaurFactory->growVelociraptor(Argument::any())
+            ->shouldHaveBeenCalledTimes(2);
     }
 }
