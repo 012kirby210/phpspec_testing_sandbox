@@ -1,0 +1,37 @@
+<?php
+
+namespace spec\App\Service;
+
+use App\Entity\Dinosaur;
+use App\Entity\Enclosure;
+use App\Factory\DinosaurFactory;
+use App\Service\EnclosureBuilderService;
+use PhpSpec\ObjectBehavior;
+
+class EnclosureBuilderServiceSpec extends ObjectBehavior
+{
+    function it_is_initializable()
+    {
+        $this->shouldHaveType(EnclosureBuilderService::class);
+    }
+
+    function it_builds_enclosure_with_dinosaurs(DinosaurFactory $dinosaurFactory)
+    {
+        $this->beConstructedWith($dinosaurFactory);
+        $dino1 = new Dinosaur('Stegosaurus',false);
+        $dino1->setLength(6);
+        $dino2 = new Dinosaur( 'Baby Stegosaurus',false);
+        $dino2->setLength(2);
+
+        // the method growVelociraptor must take 5 as  argument (it is asserted)
+        $dinosaurFactory->growVelociraptor(5)->willReturn($dino1,$dino2);
+
+        $enclosure = $this->buildeEnclosure(1,2);
+
+
+        $enclosure->shouldBeAnInstanceOf(Enclosure::class);
+        $enclosure->isSecurityActive()->shouldReturn(true);
+        $enclosure->getDinosaurs()[0]->shouldBe($dino1);
+        $enclosure->getDinosaurs()[1]->shouldBe($dino2);
+    }
+}
