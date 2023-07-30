@@ -6,22 +6,27 @@ use App\Entity\Dinosaur;
 use App\Entity\Enclosure;
 use App\Factory\DinosaurFactory;
 use App\Service\EnclosureBuilderService;
+use App\Service\EntityManagerInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class EnclosureBuilderServiceSpec extends ObjectBehavior
 {
+
+    function let(DinosaurFactory $dinosaurFactory, EntityManagerInterface $entityManager)
+    {
+        $this->beConstructedWith($dinosaurFactory, $entityManager);
+    }
     function it_is_initializable()
     {
         $this->shouldHaveType(EnclosureBuilderService::class);
     }
 
-    function it_builds_enclosure_with_dinosaurs(DinosaurFactory $dinosaurFactory)
+    function it_builds_enclosure_with_dinosaurs(DinosaurFactory $dinosaurFactory, EntityManagerInterface $entityManager)
     {
-        $this->beConstructedWith($dinosaurFactory);
-        $dino1 = new Dinosaur('Stegosaurus',false);
+        $dino1 = new Dinosaur('Stegosaurus', false);
         $dino1->setLength(6);
-        $dino2 = new Dinosaur( 'Baby Stegosaurus',false);
+        $dino2 = new Dinosaur('Baby Stegosaurus', false);
         $dino2->setLength(2);
 
         // the method growVelociraptor must take 5 as  argument (it is asserted)
@@ -30,7 +35,7 @@ class EnclosureBuilderServiceSpec extends ObjectBehavior
 
 //            ->shouldBeCalledTimes(2);
 
-        $enclosure = $this->buildeEnclosure(1,2);
+        $enclosure = $this->buildeEnclosure(1, 2);
 
 
         $enclosure->shouldBeAnInstanceOf(Enclosure::class);
@@ -40,5 +45,10 @@ class EnclosureBuilderServiceSpec extends ObjectBehavior
 
         $dinosaurFactory->growVelociraptor(Argument::any())
             ->shouldHaveBeenCalledTimes(2);
+
+        $entityManager->persist(Argument::type(Enclosure::class))
+            ->shouldHaveBeenCalled();
+        $entityManager->flush()
+            ->shouldHaveBeenCalled();
     }
 }
